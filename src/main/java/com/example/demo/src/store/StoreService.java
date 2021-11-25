@@ -3,8 +3,10 @@ package com.example.demo.src.store;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.likeStore.model.PostLikeStoreReq;
 import com.example.demo.src.store.model.PostStoreReq;
 import com.example.demo.src.store.model.PostStoreRes;
+import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -12,8 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.PASSWORD_ENCRYPTION_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 public class StoreService {
@@ -44,12 +45,36 @@ public class StoreService {
         }
         try {
             int storeIdx = storeDao.createStore(postStoreReq);
-            System.out.println("storeIdx = " + storeIdx);
-            return new PostStoreRes(storeIdx);
+
+            String jwt = jwtService.createStoreJwt(storeIdx);
+            return new PostStoreRes(storeIdx,jwt);
+        } catch (Exception e) {
+            System.out.println("StoreService.createStore");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+//-------------찜 수 증가-----------------
+    public void addLikeStoreCount(PostLikeStoreReq postLikeStoreReq) throws BaseException {
+        try {
+            int result = storeDao.addLikeStoreCount(postLikeStoreReq);
+            if(result==0){
+                throw new BaseException(DELETE_FAIL_ERROR);
+            }
         } catch (Exception e) {
             System.out.println("StoreService.createStore");
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+    public void minusLikeStoreCount(PostLikeStoreReq postLikeStoreReq) throws BaseException {
+        try {
+            int result = storeDao.minusLikeStoreCount(postLikeStoreReq);
+            if(result==0){
+                throw new BaseException(DELETE_FAIL_ERROR);
+            }
+        } catch (Exception e) {
+            System.out.println("StoreService.createStore");
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

@@ -8,4 +8,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostStoreRes {
     private int storeIdx;
+    private String jwt;
 }

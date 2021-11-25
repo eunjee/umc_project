@@ -45,6 +45,7 @@ public enum BaseResponseStatus {
     POST_STORE_EXIST_STORE_NAME(false,2024,"이미 있는 음식점이름입니다."),
     NOT_EXIST_STORE_NAME(false,2025,"해당 음식점이 없습니다."),
     NOT_EXIST_CATEGORY_NUM(false,2026,"해당 카테고리가 없습니다."),
+    INVALID_STORE_LAST_IDX(false,2027,"가게 인덱스의 범위를 벗어났습니다."),
 
     /**
      * 3000 : Response 오류
@@ -71,9 +72,11 @@ public enum BaseResponseStatus {
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
     // 5000 : 필요시 만들어서 쓰세요
+    INVALID_STORE_JWT(false,2003,"권한이 없는 가게의 접근입니다."),
     WITHDRAW_ERROR(false, 5001, "탈퇴한 회원입니다"),
     USER_STATUS_ERROR(false,5002,"활성화된 계정이 아닙니다."),
-    DELETE_FAIL_ERROR(false,5003,"회원 탈퇴에 실패하였습니다");
+    DELETE_FAIL_ERROR(false,5003,"회원 탈퇴에 실패하였습니다"),
+    PATCH_MENU_PRICE_EMPTY(false,5004,"수정할 메뉴 가격을 입력해주세요");
 
     // 6000 : 필요시 만들어서 쓰세요
 

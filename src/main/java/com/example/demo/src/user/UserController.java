@@ -185,10 +185,17 @@ public class UserController {
     // Path-variable
     @ResponseBody
     @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) throws BaseException {
         // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
         //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
         //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
+
+        //jwt에서 idx 추출.
+        int userIdxByJwt = jwtService.getUserIdx();
+        //userIdx와 접근한 유저가 같은지 확인
+        if(userIdx != userIdxByJwt){
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
         // Get Users
         try {
             GetUserRes getUserRes = userProvider.getUser(userIdx);
@@ -208,7 +215,6 @@ public class UserController {
     public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user) {
         try {
 
-  //*********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
             //jwt에서 idx 추출.
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
@@ -216,7 +222,6 @@ public class UserController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //같다면 유저네임 변경
-  //**************************************************************************
 
             //닉네임 조건이 맞으면 patch를 수행한다.
             String nickName = user.getNickName();
@@ -239,17 +244,15 @@ public class UserController {
     @DeleteMapping("/{userIdx}")
     public BaseResponse<String> withDrawUser(@PathVariable("userIdx") int userIdx, @RequestBody User user) {
         try {
-    /**
-    *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-    //jwt에서 idx 추출.
-    int userIdxByJwt = jwtService.getUserIdx();
-    //userIdx와 접근한 유저가 같은지 확인
-    if(userIdx != userIdxByJwt){
-    return new BaseResponse<>(INVALID_USER_JWT);
-    }
-    //같다면 유저네임 변경
-    **************************************************************************
-    */
+
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+            return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+
             //비밀번호 조건이 맞으면 patch를 수행한다.
             String userPassword = user.getUserPassword();
             System.out.println("userPassword +isRegexPassword(userPassword) = " + userPassword +isRegexPassword(userPassword));
