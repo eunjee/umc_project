@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>getElementById 예제</title>
+</head>
+
+<body>
+<p id="para">어떤 글</p>
+<button id="btn_blue">blue</button>
+<button id="btn_red">red</button>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function changeColor(newColor) {
+        var elem = document.getElementById('para');
+        elem.style.color = newColor;
+    }
+
+    document.getElementById('btn_blue').addEventListener('click', function (event) {
+        var elem = document.getElementById('para');
+        elem.style.color = 'blue';
+
+
+        $.ajax({
+            url: 'https://jsonplaceholder.typicode.com/posts/1',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                console.log(data.title);
+
+                document.getElementById('para').innerText = data.title;
+
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+
+
+        /*
+        $.ajax({
+          url: 'https://jsonplaceholder.typicode.com/posts',
+          type: 'GET',
+          success: function (data) {
+            console.log(data);
+            console.log(data[0]);
+            document.getElementById('para').innerText = data[0].title;
+
+          },
+          error: function (error) {
+            console.error(error);
+          }
+        });
+        */
+
+    });
+
+    document.getElementById('btn_red').addEventListener('click', () => changeColor('red'));
+
+</script>
+
+</body>
+
+</html>
